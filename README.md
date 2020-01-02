@@ -1,6 +1,6 @@
 # 生命周期
 
-输入属性是一个对象的时候，`ChangeDetectionStrategy.OnPush`事件触发导致组件进行了变更检查
+输入属性是一个对象的时候，添加`ChangeDetectionStrategy.OnPush`，Click事件触发导致组件进行了变更检查
 
 *src\app\lifecycle\lifecycle.component.ts*
 
