@@ -1,6 +1,6 @@
 # 生命周期
 
-当输入属性是`Observable`的时候，并且在组件中进行`subscribe`操作，此时页面数据无法时时刷新，需要自己做变更检测插入到模板中：
+当输入属性是`Observable`的时候，使用`async`管道可以替代组件的`subscribe`操作以及变更检查：
 
 *src\app\lifecycle\lifecycle.component.ts*
 
@@ -15,17 +15,12 @@ export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() service: Observable<any>;
-  index: number;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor() {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
   }
     
   ngOnInit() {
-    this.service.subscribe((result) => {
-      this.index = result;
-      this.changeDetectorRef.detectChanges();
-    });
     console.log('%cLifeCycleComponent.ngOnInit(2)', CLASS_ONE);
   }
 }
@@ -58,7 +53,7 @@ export class AppComponent {
 结果：
 
 
-页面`index`值时时刷新
+页面`service`值时时刷新
 
 ```
 LifeCycleComponent.ngDoCheck(3)

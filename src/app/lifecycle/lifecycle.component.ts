@@ -15,9 +15,8 @@ export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() service: Observable<any>;
-  index: number;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor() {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
   }
 
@@ -27,10 +26,6 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
   }
 
   ngOnInit() {
-    this.service.subscribe((result) => {
-      this.index = result;
-      this.changeDetectorRef.detectChanges();
-    });
     console.log('%cLifeCycleComponent.ngOnInit(2)', CLASS_ONE);
   }
 
