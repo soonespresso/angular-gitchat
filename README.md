@@ -24,8 +24,10 @@ export class AppComponent {
 
 结果：
 
+页面`object`值时时刷新
+
 ```
-LifeCycleComponent.ngDoCheck(3)
+LifeCycleComponent.ngDoCheck(3) {"index":5}
 LifeCycleComponent.ngAfterContentChecked(5)
 LifeCycleComponent.ngAfterViewChecked(7)
 ...

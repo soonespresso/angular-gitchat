@@ -27,7 +27,7 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
   }
 
   ngDoCheck(): void {
-    console.log('%cLifeCycleComponent.ngDoCheck(3)', CLASS_MANY3);
+    console.log(`%cLifeCycleComponent.ngDoCheck(3) ${JSON.stringify(this.object)}`, CLASS_MANY3);
   }
 
   ngAfterContentInit(): void {
