@@ -19,7 +19,11 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('%cLifeCycleComponent.ngOnChanges(1)', CLASS_MANY);
-    console.log(`%c\t└ CurrentValue: ${changes.object.currentValue}, previousValue: ${changes.object.previousValue}`, CLASS_MANY);
+    console.log(`%c    └ CurrentValue: ${
+      JSON.stringify(changes.object.currentValue)
+    }, previousValue: ${
+      JSON.stringify(changes.object.previousValue)
+    }`, CLASS_MANY);
   }
 
   ngOnInit() {
