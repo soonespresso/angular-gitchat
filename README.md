@@ -1,5 +1,7 @@
 # 生命周期
 
+> **lifecycle-01-object**
+
 输入属性是一个对象的时候，添加`ChangeDetectionStrategy.OnPush`，Click事件触发导致组件进行了变更检查
 
 *src\app\lifecycle\lifecycle.component.ts*
@@ -24,7 +26,8 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 
 结果：
 
-点击`Do Click`按钮后，页面`object`值刷新
+
+页面`object`值不时时刷新，点击`Do Click`按钮后，页面`object`值刷新
 
 ```
 LifeCycleComponent.ngDoCheck(3)
