@@ -25,7 +25,7 @@ export class AppComponent {
 
 ```
 LifeCycleComponent.ngOnChanges(1)
-CurrentValue: 11, previousValue: 10
+  └ CurrentValue: 2, previousValue: 1
 LifeCycleComponent.ngDoCheck(3)
 LifeCycleComponent.ngAfterContentChecked(5)
 LifeCycleComponent.ngAfterViewChecked(7)
