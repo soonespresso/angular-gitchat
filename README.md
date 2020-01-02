@@ -30,7 +30,7 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 页面`object`值不时时刷新，点击`Do Click`按钮后，页面`object`值刷新
 
 ```
-LifeCycleComponent.ngDoCheck(3)
+LifeCycleComponent.ngDoCheck(3) {"index":7}
 LifeCycleComponent.ngAfterContentChecked(5)
 LifeCycleComponent.ngAfterViewChecked(7)
 ...
