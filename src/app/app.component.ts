@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ObservableService } from './service/observable.service';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  object = {
-    index: 1
-  };
+  index = 1;
 
-  constructor() {
+  constructor(public service: ObservableService) {
     setInterval(() => {
-      this.object.index++;
+      this.service.changeData(this.index++);
     }, 2000);
   }
 }

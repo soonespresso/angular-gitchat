@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, ChangeDetectionStrategy,
   OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLASS_MANY7 } from 'src/common/common';
+import { Observable } from 'rxjs';
+import { ObservableService } from '../service/observable.service';
 
 // tslint:disable-next-line:no-conflicting-lifecycle
 @Component({
@@ -12,19 +14,15 @@ import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLA
 export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
-  @Input() object = { index: 0 };
+  @Input() service: Observable<any>; // ObservableService;
 
-  click() {
-    console.log('Do click!');
-  }
-
-  constructor() {
+  constructor(/* public service: ObservableService */) {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('%cLifeCycleComponent.ngOnChanges(1)', CLASS_MANY);
-    console.log(`%c\t└ CurrentValue: ${changes.object.currentValue}, previousValue: ${changes.object.previousValue}`, CLASS_MANY);
+    console.log(`%c\t└ CurrentValue: ${changes.service.currentValue}, previousValue: ${changes.service.previousValue}`, CLASS_MANY);
   }
 
   ngOnInit() {
@@ -32,7 +30,7 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
   }
 
   ngDoCheck(): void {
-    console.log(`%cLifeCycleComponent.ngDoCheck(3) ${JSON.stringify(this.object)}`, CLASS_MANY3);
+    console.log(`%cLifeCycleComponent.ngDoCheck(3)`, CLASS_MANY3);
   }
 
   ngAfterContentInit(): void {

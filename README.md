@@ -1,8 +1,27 @@
 # 生命周期
 
-> **lifecycle-01-object**
+> `| async`相当于在模板中做`subscribe`也不用脏值检查`markForCheck()`
 
-输入属性是一个对象的时候，添加`ChangeDetectionStrategy.OnPush`，Click事件触发导致组件进行了变更检查
+当输入属性是`Observable`
+
+*src\app\service\observable.service.ts*
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class ObservableService {
+
+  private messageSource = new BehaviorSubject(1);
+  public comeOneData = this.messageSource.asObservable();
+
+  constructor() { }
+
+  changeData(message: any) {
+    this.messageSource.next(message);
+  }
+}
+```
 
 *src\app\lifecycle\lifecycle.component.ts*
 
@@ -16,10 +35,34 @@
 export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
-  @Input() object = { index: 0 };
+  @Input() service: Observable<any>;
 
-  click() {
-    console.log('Do click!');
+  constructor() {
+    console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
+  }
+    
+  ngDoCheck(): void {
+    console.log(`%cLifeCycleComponent.ngDoCheck(3)`, CLASS_MANY3);
+  }
+}
+```
+
+*src\app\app.component.ts*
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent {
+
+  index = 1;
+
+  constructor(public service: ObservableService) {
+    setInterval(() => {
+      this.service.changeData(this.index++);
+    }, 2000);
   }
 }
 ```
@@ -27,7 +70,7 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 结果：
 
 
-页面`object`值不时时刷新，点击`Do Click`按钮后，页面`object`值刷新
+页面`Observable`值不时时刷新
 
 ```
 LifeCycleComponent.ngDoCheck(3) {"index":7}
