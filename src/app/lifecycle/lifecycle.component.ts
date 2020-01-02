@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges,
+import { Component, OnInit, Input, SimpleChanges, ChangeDetectionStrategy,
   OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLASS_MANY7 } from 'src/common/common';
 
@@ -6,12 +6,17 @@ import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLA
 @Component({
   selector: 'app-lifecycle',
   templateUrl: './lifecycle.component.html',
-  styleUrls: ['./lifecycle.component.scss']
+  styleUrls: ['./lifecycle.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() object = { index: 0 };
+
+  click() {
+    console.log('Do click!');
+  }
 
   constructor() {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
