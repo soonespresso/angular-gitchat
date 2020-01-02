@@ -7,11 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  index = 0;
+  object = {
+    index: 1
+  };
 
   constructor() {
     setInterval(() => {
-      this.index++;
+      this.object.index++;
     }, 2000);
   }
 }

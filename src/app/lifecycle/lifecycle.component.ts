@@ -11,7 +11,7 @@ import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLA
 export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
-  @Input() index = 0;
+  @Input() object = { index: 0 };
 
   constructor() {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
@@ -19,7 +19,7 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('%cLifeCycleComponent.ngOnChanges(1)', CLASS_MANY);
-    console.log(`%c\tCurrentValue: ${changes.index.currentValue}, previousValue: ${changes.index.previousValue}`, CLASS_MANY);
+    console.log(`%c\t└ CurrentValue: ${changes.object.currentValue}, previousValue: ${changes.object.previousValue}`, CLASS_MANY);
   }
 
   ngOnInit() {
