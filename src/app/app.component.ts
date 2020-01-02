@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-gitchat';
+
+  index = 0;
+
+  constructor() {
+    setInterval(() => {
+      this.index++;
+    }, 2000);
+  }
 }
