@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges, ChangeDetectionStrategy,
-  OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
+  OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLASS_MANY7 } from 'src/common/common';
+import { timingSafeEqual } from 'crypto';
+import { trimTrailingNulls } from '@angular/compiler/src/render3/view/util';
+import { triggerAsyncId } from 'async_hooks';
 
 // tslint:disable-next-line:no-conflicting-lifecycle
 @Component({
@@ -14,12 +17,9 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 
   @Input() object = { index: 0 };
 
-  click() {
-    console.log('Do click!');
-  }
-
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
+    this.changeDetectorRef.detach(); // 如果detach, 那么markForCheck就不起作用了
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -32,7 +32,9 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
   }
 
   ngDoCheck(): void {
-    console.log('%cLifeCycleComponent.ngDoCheck(3)', CLASS_MANY3);
+    console.log(`%cLifeCycleComponent.ngDoCheck(3) ${JSON.stringify(this.object)}`, CLASS_MANY3);
+    // this.changeDetectorRef.markForCheck(); // 不 detach 的时候，这个也可以
+    this.changeDetectorRef.detectChanges();
   }
 
   ngAfterContentInit(): void {

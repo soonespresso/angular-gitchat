@@ -1,6 +1,8 @@
 # 生命周期
 
-输入属性是一个对象的时候，添加`ChangeDetectionStrategy.OnPush`，Click事件触发导致组件进行了变更检查
+> **lifecycle-01-object**
+
+输入属性是一个对象的时候，添加`ChangeDetectionStrategy.OnPush`，虽然`ngOnChanges`不执行，但是可以通过`ngDoCheck`执行！
 
 *src\app\lifecycle\lifecycle.component.ts*
 
@@ -16,18 +18,25 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 
   @Input() object = { index: 0 };
 
-  click() {
-    console.log('Do click!');
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
+    console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
+    this.changeDetectorRef.detach(); // 如果detach, 那么markForCheck就不起作用了
+  }
+    
+  ngDoCheck(): void {
+    console.log(`%cLifeCycleComponent.ngDoCheck(3) ${JSON.stringify(this.object)}`, CLASS_MANY3);
+    // this.changeDetectorRef.markForCheck(); // 不 detach 的时候，这个也可以
+    this.changeDetectorRef.detectChanges();
   }
 }
 ```
 
 结果：
 
-点击`Do Click`按钮后，页面`object`值刷新
+页面值时时刷新
 
 ```
-LifeCycleComponent.ngDoCheck(3)
+LifeCycleComponent.ngDoCheck(3) {"index":1}
 LifeCycleComponent.ngAfterContentChecked(5)
 LifeCycleComponent.ngAfterViewChecked(7)
 ...
