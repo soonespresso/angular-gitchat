@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ObservableService } from './service/observable.service';
+import { Observable, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +9,14 @@ import { ObservableService } from './service/observable.service';
 export class AppComponent {
 
   index = 1;
+  observer: Subscriber<number>;
+  service = Observable.create((observer: Subscriber<number>) => {
+    this.observer = observer;
+  });
 
-  constructor(public service: ObservableService) {
+  constructor() {
     setInterval(() => {
-      this.service.changeData(this.index++);
+      this.observer.next(this.index++);
     }, 2000);
   }
 }

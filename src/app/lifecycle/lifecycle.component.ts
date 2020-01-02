@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ChangeDetectionStrategy,
+import { Component, OnInit, Input, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef,
   OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { CLASS_CONSTRUCTOR, CLASS_MANY, CLASS_ONE, CLASS_MANY3, CLASS_MANY5, CLASS_MANY7 } from 'src/common/common';
 import { Observable } from 'rxjs';
@@ -14,9 +14,10 @@ import { ObservableService } from '../service/observable.service';
 export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
-  @Input() service: Observable<any>; // ObservableService;
+  @Input() service: Observable<any>;
+  index: number;
 
-  constructor(/* public service: ObservableService */) {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
   }
 
@@ -26,6 +27,10 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
   }
 
   ngOnInit() {
+    this.service.subscribe((result) => {
+      this.index = result;
+      this.changeDetectorRef.detectChanges();
+    });
     console.log('%cLifeCycleComponent.ngOnInit(2)', CLASS_ONE);
   }
 

@@ -1,27 +1,6 @@
 # 生命周期
 
-> `| async`相当于在模板中做`subscribe`也不用脏值检查`markForCheck()`
-
-当输入属性是`Observable`
-
-*src\app\service\observable.service.ts*
-
-```typescript
-@Injectable({
-  providedIn: 'root'
-})
-export class ObservableService {
-
-  private messageSource = new BehaviorSubject(1);
-  public comeOneData = this.messageSource.asObservable();
-
-  constructor() { }
-
-  changeData(message: any) {
-    this.messageSource.next(message);
-  }
-}
-```
+当输入属性是`Observable`的时候，并且在组件中进行`subscribe`操作，此时页面数据无法时时刷新，需要自己做变更检测插入到模板中：
 
 *src\app\lifecycle\lifecycle.component.ts*
 
@@ -36,13 +15,18 @@ export class LifecycleComponent
 implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
 
   @Input() service: Observable<any>;
+  index: number;
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     console.log('%cLifeCycleComponent.constructor(0)', CLASS_CONSTRUCTOR);
   }
     
-  ngDoCheck(): void {
-    console.log(`%cLifeCycleComponent.ngDoCheck(3)`, CLASS_MANY3);
+  ngOnInit() {
+    this.service.subscribe((result) => {
+      this.index = result;
+      this.changeDetectorRef.detectChanges();
+    });
+    console.log('%cLifeCycleComponent.ngOnInit(2)', CLASS_ONE);
   }
 }
 ```
@@ -58,10 +42,14 @@ implements OnChanges, OnInit, DoCheck, AfterContentInit, AfterContentChecked, Af
 export class AppComponent {
 
   index = 1;
+  observer: Subscriber<number>;
+  service = Observable.create((observer: Subscriber<number>) => {
+    this.observer = observer;
+  });
 
-  constructor(public service: ObservableService) {
+  constructor() {
     setInterval(() => {
-      this.service.changeData(this.index++);
+      this.observer.next(this.index++);
     }, 2000);
   }
 }
@@ -70,10 +58,10 @@ export class AppComponent {
 结果：
 
 
-页面`Observable`值时时刷新
+页面`index`值时时刷新
 
 ```
-LifeCycleComponent.ngDoCheck(3) {"index":7}
+LifeCycleComponent.ngDoCheck(3)
 LifeCycleComponent.ngAfterContentChecked(5)
 LifeCycleComponent.ngAfterViewChecked(7)
 ...
