@@ -70,7 +70,7 @@ export class AppComponent {
 结果：
 
 
-页面`Observable`值不时时刷新
+页面`Observable`值时时刷新
 
 ```
 LifeCycleComponent.ngDoCheck(3) {"index":7}
