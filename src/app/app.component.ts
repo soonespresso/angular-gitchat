@@ -13,7 +13,9 @@ export class AppComponent {
 
   constructor() {
     setInterval(() => {
-      this.object.index++;
+      this.object = {
+        index: this.object.index++
+      };
     }, 2000);
   }
 }
