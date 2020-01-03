@@ -46,7 +46,7 @@ export const faderSimplify = trigger('visibilityChanged', [
 ## 动画时间控制
 
 Angular提供3种控制时间效果的属性，分别是`duration`、`delay`和`easing`。
-表达式：`animate('duration delay easing')`
+表达式：`animate('duration delay easing')`。
 
 ### Duration
 
