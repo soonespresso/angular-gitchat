@@ -3,14 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlyInComponent } from './fly-in/fly-in.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FlyInComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule// 动画效果
   ],
   providers: [],
   bootstrap: [AppComponent]
