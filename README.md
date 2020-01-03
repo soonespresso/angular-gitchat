@@ -1,27 +1,88 @@
-# AngularGitchat
+# Angular 动画
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.14.
+## 淡入淡出
 
-## Development server
+*src\app\animations\fly-in.ts*
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```typescript
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
-## Code scaffolding
+export const fader = trigger('visibilityChanged', [
+  state('shown', style({ opacity: 1 })),
+  state('hidden', style({ opacity: 0 })),
+  transition('* => *', animate('.5s'))
+]);
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 淡入淡出简化
 
-## Build
+*src\app\animations\fader-simplify.ts*
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```typescript
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
-## Running unit tests
+export const faderSimplify = trigger('visibilityChanged', [
+  state('true', style({ opacity: 1, transform: 'scale(1)' })),
+  state('false', style({ opacity: 1, transform: 'scale(0.5)' })),
+  transition('true => false', animate('1s')),
+  transition('0 => 1', animate('500ms'))
+]);
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
 
-## Running end-to-end tests
+## 细说State
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### wildcard state
 
-## Further help
+`transition('* => *', animate('.5s'))`中的`*`就是wildcard state（**通用符号**），表示所有状态。
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### void state
+
+`void`表示没有东西，可能是被移除或是还没产生，`void`用在进入或出场时非常好用。
+
+- 飞入：`void => *`
+- 飞出：`* => void`
+
+## 动画时间控制
+
+Angular提供3种控制时间效果的属性，分别是`duration`、`delay`和`easing`。表达式：`duration delay easing `
+
+### Duration
+
+- 直接用数字，预设单位为`ms`：`100`
+- 用字符串加上：`100ms`
+- 用字符串加上：`0.1s`
+
+### Delay
+
+- 等到100ms然后动画运行200ms：`0.2s 100ms`
+
+### Easing
+
+- 等待100ms然后运行200ms搭配淡出效果：`0.2s 100ms ease-out`
+- 执行200ms搭配淡入效果：`0.2s ease-in`
+
+*src\app\animations\fly-inout.ts*
+
+```typescript
+import { trigger, transition, animate, style, state } from '@angular/animations';
+
+export const flyInOut = trigger('flyInOut', [
+  /* state('in', style({ opacity: 1, transform: 'translateX(0)' })),
+  state('out', style({ opacity: 0 })), */
+  transition('void => *', [
+    style({ opacity: 0, transform: 'translateX(50%)' }),
+    animate('0.5s ease-in')
+  ]),
+  transition('* => void', [
+    animate('2s 0.2s ease-out', style({
+      opacity: 0,
+      transform: 'translateX(100%)'
+    }))
+  ]),
+]);
+
+```
+
+
+

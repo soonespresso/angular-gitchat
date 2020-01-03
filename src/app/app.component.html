@@ -1,3 +1,8 @@
 <!-- <app-fly-in></app-fly-in> -->
-<app-fader [isVisible]="isVisible"></app-fader>
+<!-- 淡入淡出 -->
+<!-- <app-fader [isVisible]="isVisible"></app-fader> -->
+<!-- 淡入淡出简化 -->
+<!-- <app-fader-simplify [isVisible]="isVisible"></app-fader-simplify> -->
+<!-- 飞入飞出 -->
+<app-fly-inout [isVisible]="isVisible"></app-fly-inout>
 <button (click)="isVisible = !isVisible">Toggle</button>

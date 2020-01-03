@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlyInComponent } from './fly-in/fly-in.component';
 import { FaderComponent } from './fader/fader.component';
+import { FaderSimplifyComponent } from './fader-simplify/fader-simplify.component';
+import { FlyInoutComponent } from './fly-inout/fly-inout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FlyInComponent,
-    FaderComponent
+    FaderComponent,
+    FaderSimplifyComponent,
+    FlyInoutComponent
   ],
   imports: [
     BrowserModule,
