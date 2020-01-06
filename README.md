@@ -1,5 +1,7 @@
 # @ContentChild 和 @ContentChildren
 
+contentChild、contentChildren是关于`<ngcontent>`内容获取相关，其中`<ng-content>`的select属性支持选择器区分映射进来的内容。
+
 ```ts
 // Ensure Change Detection runs before accessing the instance
 @ContentChild('foo', { static: false }) foo!: ElementRef;
