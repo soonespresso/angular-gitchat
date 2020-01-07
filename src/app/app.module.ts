@@ -3,10 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MyHighLightDirective } from './directives/my-high-light.directive';
+import { CardComponent } from './card/card.component';
+import { DelayDirective } from './directives/delay.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MyHighLightDirective,
+    CardComponent,
+    DelayDirective
   ],
   imports: [
     BrowserModule,

@@ -9,12 +9,14 @@ body {
   font-family: '微软雅黑', 'Microsoft YaHei', '宋体', Tahoma, Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.5;
+  background-color: wheat;
 }
 
 html {
 min-height: 100%;
 position: relative;
 padding-bottom: 162px;
+background-color: wheat;
 }
 
 @import "~bootstrap/dist/css/bootstrap.min.css";
