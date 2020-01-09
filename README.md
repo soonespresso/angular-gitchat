@@ -48,4 +48,4 @@ export class AppModule { }
 
 ## Angular 内核自身的模块结构
 
-![Angular 内核自身的模块结构](assets/Angular 内核自身的模块结构.png)
+ ![Angular 内核自身的模块结构](assets/Angular 内核自身的模块结构.png)
