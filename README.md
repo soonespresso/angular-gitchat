@@ -1,54 +1,58 @@
-# 路由与懒加载模块
+# 共享模块
 
-![路由与懒加载模块](assets/路由与懒加载模块.png)
+现在需要在页面侧边栏添加一个展示用户资料的 Panel（面板），并且这个展示用户资料的 Panel 在 jokes 模块里也要用，而且其他地方未来可能也要用到。
 
-> 为什么要做模块的懒加载？
+这时候，“共享模块”机制出场！根据 Angular 规定：**组件必须定义在某个模块里面，但是不能同时属于多个模块。**
 
-目的很简单：提升 JS 文件的加载速度，提升 JS 文件的执行效率。
+如果，把 UserInfo 面板定义在 home.module 中，jokes.module 就不能使用了，反之亦然。当然，UserInfo 定义在根模块 app.module 里也不好—— 如果系统功能不断增多，app.module 最终打包就会很胖。
 
-对于一些大型的后台管理系统，可能会有上千份 JS 文件，如果把所有 JS 全部都压缩对一份文件里，这份文件的体积可能会超过 5M，这是不能接受的，尤其对于移动端应用。
+所以，更优雅的做法是切分一个“共享模块”，对于所有想使用 UserInfo 的模块来说，只要 import 这个 SharedModule 就可以了。
 
-所以，按照业务功能，把这些 JS 打包成多份 JS 文件，当用户导航到某一个路径的时候，再去异步加载对应的 JS 文件。这种方式非常有效地提升系统的加载和运行效率。
-
-*src\app\app-routing.module.ts*
+*src\app\shared\shared.module.ts*
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { UserInfoComponent } from '../user-info/user-info.component';
+import { OrderInfoComponent } from '../order-info/order-info.component';
 
 
-const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', loadChildren: './home/home.module#HomeModule' }
-];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  declarations: [
+    UserInfoComponent,
+    OrderInfoComponent
+  ],
+  exports: [
+    UserInfoComponent,
+    OrderInfoComponent
+  ]
 })
-export class AppRoutingModule { }
+export class SharedModule { }
+
 ```
 
- ![懒加载路由](assets/懒加载路由.png)
-
-注意：从 Angular8.0 开始，为了遵守最新的 import() 标准，官方建议采用新的方式来写`loadChildren`：
+*src\app\home\home.module.ts*
 
 ```typescript
-// before Angular 8.x
-const routes: Routes = [
-  { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' }
-];
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-// Angular 8.x
-const routes: Routes = [
-  { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-  { path: 'jokes', loadChildren: () => import('./jokes/jokes.module').then(m => m.JokesModule) },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
-];
+import { HomeRoutingModule } from './home-routing.module';
+import { HomeComponent } from './home.component';
+import { SharedModule } from '../shared/shared.module';
+
+
+@NgModule({
+  declarations: [
+    HomeComponent
+  ],
+  imports: [
+    CommonModule,
+    HomeRoutingModule,
+    SharedModule
+  ]
+})
+export class HomeModule { }
 
 ```
 
