@@ -15,11 +15,16 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('tpl', { read: ViewContainerRef, static: false })
   tplVcRef: ViewContainerRef;
 
+  @ViewChild('tplc', { read: ViewContainerRef, static: false })
+  tplcVcRef: ViewContainerRef;
+
   ngAfterViewInit(): void {
     console.dir(this.tplVcRef);
     // 创建内嵌视图
     // const embeddedView = this.tplVcRef.createEmbeddedView(this.tpl);
     // console.log(embeddedView);
+
+    this.tplcVcRef.createEmbeddedView(this.tpl);
   }
 
   _ngAfterViewInit(): void {

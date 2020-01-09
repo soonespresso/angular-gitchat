@@ -79,7 +79,7 @@ export class AppComponent implements AfterViewInit {
 
 `<ng-tempate>`模板元素，渲染后被替换成`commnet`。`TemplateRef`抽象类中定义的`createEmbeddedView`抽象方法，该方法返回值是`EmbeddedViewRef`对象。通过调用`createEmbeddedView`方法返回了`ViewRef_`视图对象。该视图对象的`rootNodes`属性包含了`<ng-template>`模板中的内容。由于`TemplateRef`实例对象中的`elementRef`属性封装了页面的`comment`元素，所以可以通过`insertBefore`方法创建模板定义的内容。
 
->`TemplateRef # createEmbeddedView(context: C): EmbeddedViewRef<C>;`中`context`相当于一个容器流上下文。
+>`TemplateRef # createEmbeddedView(context: C): EmbeddedViewRef<C>;`中`context`相当于参数。
 
 *src\app\app.component.ts*
 
