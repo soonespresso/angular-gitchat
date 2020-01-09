@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { JokesComponent } from './jokes/jokes.component';
 
 
 const routes: Routes = [
   { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-  { path: 'jokes', loadChildren: () => import('./jokes/jokes.module').then(m => m.JokesModule) },
+  { path: 'jokes', component: JokesComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' },
-  /* { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', loadChildren: './home/home.module#HomeModule' } */
 ];
 
 @NgModule({
