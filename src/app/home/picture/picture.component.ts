@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterService } from 'src/app/services/router.service';
 
 @Component({
   selector: 'app-picture',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PictureComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private service: RouterService) {
+    this.service.pictureRouter = router;
+  }
 
   ngOnInit() {
   }
