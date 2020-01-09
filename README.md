@@ -1,28 +1,27 @@
-# 路由概述与基本用法
+# 路由与懒加载模块
 
-> Angular 中的 Router 模块会负责模块的加载、组件的初始化、销毁等操作，它是整个乐队的总指挥。
+![路由与懒加载模块](assets/路由与懒加载模块.png)
 
-Router 的本质是记录当前页面的状态，它和当前页面上展示的内容一一对应，
+> 为什么要做模块的懒加载？
 
-在 Angular 里面，Router 是一个独立的模块，定义在`@angular/router`模块里面，有以下重要的作用：
+目的很简单：提升 JS 文件的加载速度，提升 JS 文件的执行效率。
 
-- Router 可以配合 NGModule 进行模块的懒加载、预加载操作；
-- Router 会管理组件的生命周期，它负责创建、销毁组件。
+对于一些大型的后台管理系统，可能会有上千份 JS 文件，如果把所有 JS 全部都压缩对一份文件里，这份文件的体积可能会超过 5M，这是不能接受的，尤其对于移动端应用。
+
+所以，按照业务功能，把这些 JS 打包成多份 JS 文件，当用户导航到某一个路径的时候，再去异步加载对应的 JS 文件。这种方式非常有效地提升系统的加载和运行效率。
 
 *src\app\app-routing.module.ts*
 
 ```typescript
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { JokesComponent } from './jokes/jokes.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'jokes', component: JokesComponent },
-  { path: '**', component: HomeComponent }
+  { path: 'home', loadChildren: './home/home.module#HomeModule' },
+  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
+  { path: '**', loadChildren: './home/home.module#HomeModule' }
 ];
 
 @NgModule({
@@ -30,11 +29,26 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
 ```
 
-路由配置文件全部用`component`配置项，这种方式叫“同步路由”。也就是说，`@angular/cli`在编译的时候不会把组件切分到独立的 module 文件里，不会继续异步加载，所有组件都会被打包到一份 JS 文件里去。
+ ![懒加载路由](assets/懒加载路由.png)
 
-- 注意文件的切分，很多人把路由配置直接写在 *app.module.ts* 里面，这样不好。随着项目功能越来越多，全部写在一起未来不好维护。配置归配置，代码归代码。
-- 通配符配置必须写在最后一项，否则会导致路由无效。
+注意：从 Angular8.0 开始，为了遵守最新的 import() 标准，官方建议采用新的方式来写`loadChildren`：
+
+```typescript
+// before Angular 8.x
+const routes: Routes = [
+  { path: 'home', loadChildren: './home/home.module#HomeModule' },
+  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
+];
+
+// Angular 8.x
+const routes: Routes = [
+  { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
+  { path: 'jokes', loadChildren: () => import('./jokes/jokes.module').then(m => m.JokesModule) },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
+];
+
+```
 
