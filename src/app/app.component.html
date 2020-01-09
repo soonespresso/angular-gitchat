@@ -15,10 +15,10 @@
       <div class="collapse navbar-collapse navbar-responsive-collapse" aria-expanded="false">
           <ul class="nav navbar-nav">
               <li routerLinkActive="active" class="dropdown">
-                  <a routerLink="home">Home</a>
+                  <a [routerLink]="['home', '1']">Home</a>
               </li>
               <li routerLinkActive="active" class="dropdown">
-                <a routerLink="jokes">Jokes</a>
+                <a [routerLink]="['jokes', {id: 2, name: 'Darwin'}]">Jokes</a>
               </li>
           </ul>
       </div>

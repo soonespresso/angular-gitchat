@@ -6,7 +6,7 @@ import { JokesComponent } from './jokes/jokes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: 'home/:page', component: HomeComponent },
   { path: 'jokes', component: JokesComponent },
   { path: '**', component: HomeComponent }
 ];
