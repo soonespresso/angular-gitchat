@@ -5,19 +5,29 @@
       <div class="form-group">
         <label class="col-xs-2 control-label">User Name :</label>
         <div class="col-xs-10">
-          <input type="email" class="form-control" placeholder="Email" (keyup)="userNameChange($event)">
+          <input type="email" class="form-control" placeholder="Email" [(ngModel)]="register.userName" name="userName">
         </div>
       </div>
       <div class="form-group">
         <label class="col-xs-2 control-label">Password :</label>
         <div class="col-xs-10">
-          <input #pwd type="password" class="form-control" placeholder="Password" (keyup)="'a'">
+          <input type="password" class="form-control" placeholder="Password" [(ngModel)]="register.password" name="password">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" name="rememberMe" [(ngModel)]="register.rememberMe">Remember Me
+            </label>
+          </div>
         </div>
       </div>
     </form>
   </div>
   <div class="panel-footer">
-    <p>User Name: {{ userName }}</p>
-    <p>Password: {{ pwd.value }}</p>
+    <p>User Name: {{ register.userName }}</p>
+    <p>Password: {{ register.password }}</p>
+    <p>Remember Me: {{ register.rememberMe }}</p>
   </div>
 </div>

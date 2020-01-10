@@ -1,8 +1,18 @@
-# 表单快速开始
+# 双向数据绑定
 
-如果没有表单，我们将没有途经收集用户输入。所以，表单是前端开发里的重头戏。在日常开发中，处理表单会占据大块编码时间。
+Angular 是第一个把 “双向数据绑定” 机制引入到前端开发领域的框架。
 
-一个简单的用户注册界面
+*src\app\app.module.ts*
+
+```typescript
+@NgModule({
+  imports: [
+    ...,
+    FormsModule
+  ]
+})
+export class AppModule { }
+```
 
 *src\app\form-quick-start\form-quick-start.component.html*
 
@@ -15,22 +25,45 @@
         <label class="col-xs-2 control-label">User Name :</label>
         <div class="col-xs-10">
           <input type="email" class="form-control" placeholder="Email" 
-                 (keyup)="userNameChange($event)">
+                 [(ngModel)]="register.userName" name="userName">
         </div>
       </div>
       <div class="form-group">
         <label class="col-xs-2 control-label">Password :</label>
         <div class="col-xs-10">
-          <input #pwd type="password" class="form-control" placeholder="Password" (keyup)="3">
+          <input type="password" class="form-control" placeholder="Password" 
+                 [(ngModel)]="register.password" name="password">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" name="rememberMe" 
+                       [(ngModel)]="register.rememberMe">Remember Me
+            </label>
+          </div>
         </div>
       </div>
     </form>
   </div>
   <div class="panel-footer">
-    <p>User Name: {{ userName }}</p>
-    <p>Password: {{ pwd.value }}</p>
+    <p>User Name: {{ register.userName }}</p>
+    <p>Password: {{ register.password }}</p>
+    <p>Remember Me: {{ register.rememberMe }}</p>
   </div>
 </div>
+
+```
+
+*src\app\form-quick-start\form-quick-start.model.ts*
+
+```typescript
+export class RegisterModel {
+  userName: string;
+  password: string;
+  rememberMe = false;
+}
 
 ```
 
@@ -38,6 +71,7 @@
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
+import { RegisterModel } from './form-quick-start.model';
 
 @Component({
   selector: 'app-form-quick-start',
@@ -46,33 +80,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormQuickStartComponent implements OnInit {
 
-  userName: string;
+  register = new RegisterModel();
 
   constructor() { }
 
   ngOnInit() {
   }
-
-  userNameChange(event: any): void {
-    console.log(event);
-    this.userName = event.target.value;
-  }
-
 }
 
 ```
 
-- 第一个 input 用事件绑定的方式，将值传递给组件定义的 `userName` 属性，然后页面再用 `{{ userName }}` 获取数据。
-
-- 第二个 input 定义一个模板局部变量 `#pwd`，然后底部直接用这个名字来获取 input 的值 `{{ pwd.value }}`。
-
-  这里注意一点：标签必须写 `(keyup)="0"`，不然 Angular 不会启动变更检测机制，`{{ pwd.value }}`取不到值。
-
->`(keyup)="0"`, means, when that event happens, then return 0, which is quite equivalent to "do nothing". There is no shorter way of expressing that, except not adding any event binding at all.
->
->The event binding is used in that example to cause change detection to run, which is by default run every time an event handler was called.
->
->Without the event binding, there is no event handler and Angular won't run change detection, which will cause `{{ pwd.value }}` to not update the value.
-
-
+- 要想使用 `[(ngModel)]` 进行双向绑定，必须在你的 `@NgModule` 定义中 import `FormsModule` 模块。
+- 使用双向绑定的时候，必须给 `<input>` 标签设置 name 或 id，否则会报错。
+- 表单上展现的字段和你处理业务用的数据模型不一定完全一致，推荐设计 2 个 Model：
+  - 一个用来给表单进行绑定操作
+  - 一个用来处理的业务
 
