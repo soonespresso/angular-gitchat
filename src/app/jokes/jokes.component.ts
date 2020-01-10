@@ -7,9 +7,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JokesComponent implements OnInit {
 
+  jokeContent = '';
+  saved = true;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  writeJoke(content) {
+    this.jokeContent = content;
+    this.saved = false;
+  }
+
+  saveContent() {
+    console.log(this.jokeContent);
+    this.jokeContent = '';
+    this.saved = true;
+  }
 }
