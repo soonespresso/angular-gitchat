@@ -20,8 +20,14 @@ export class HomeComponent implements OnInit {
   }
 
   manualNav() {
+    // 支持矩阵式参数
     // this.router.navigateByUrl('/jokes;id=2;name=Darwin');
+    // this.router.navigate(['/jokes', {id: 2, name: 'Darwin'}]);
+    // -> this.activeRoute.params.subscribe
+
     // 不支持矩阵式参数
-    this.router.navigate(['/jokes'], { queryParams: { page: 1, name: 'Newton' } });
+    this.router.navigateByUrl('/jokes?page=1&name=Newton');
+    // this.router.navigate(['/jokes'], { queryParams: { page: 1, name: 'Newton' } });
+    // -> this.activeRoute.queryParams.subscribe
   }
 }
