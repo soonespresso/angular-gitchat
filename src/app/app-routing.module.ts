@@ -1,14 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { LeftNavComponent } from './home/left-nav/left-nav.component';
+import { MainAreaComponent } from './home/main-area/main-area.component';
 
 
 const routes: Routes = [
-  { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-  { path: 'jokes', loadChildren: () => import('./jokes/jokes.module').then(m => m.JokesModule) },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
-  /* { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', loadChildren: './home/home.module#HomeModule' } */
+  {
+    path: 'home',
+    component: HomeComponent,
+    children: [
+      { path: 'leftNav', component: LeftNavComponent, outlet: 'left-nav' },
+      { path: ':id', component: MainAreaComponent, outlet: 'main-area' }
+    ]
+  },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

@@ -15,10 +15,7 @@
       <div class="collapse navbar-collapse navbar-responsive-collapse" aria-expanded="false">
           <ul class="nav navbar-nav">
               <li routerLinkActive="active" class="dropdown">
-                  <a routerLink="home">Home</a>
-              </li>
-              <li routerLinkActive="active" class="dropdown">
-                <a routerLink="jokes">Jokes</a>
+                  <a [routerLink]="['home', { outlets: { 'left-nav': ['leftNav'], 'main-area': ['test'] } }]">Home</a>
               </li>
           </ul>
       </div>

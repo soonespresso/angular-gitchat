@@ -1,27 +1,37 @@
-# 路由与懒加载模块
+# 多重出口
 
-![路由与懒加载模块](assets/路由与懒加载模块.png)
+有时候我们在同一个界面上需要同时出现多块动态的内容，如图：
 
-> 为什么要做模块的懒加载？
+![多块动态内容](assets/多块动态内容.png)
 
-目的很简单：提升 JS 文件的加载速度，提升 JS 文件的执行效率。
+## app
 
-对于一些大型的后台管理系统，可能会有上千份 JS 文件，如果把所有 JS 全部都压缩对一份文件里，这份文件的体积可能会超过 5M，这是不能接受的，尤其对于移动端应用。
+*src\app\app.component.html*
 
-所以，按照业务功能，把这些 JS 打包成多份 JS 文件，当用户导航到某一个路径的时候，再去异步加载对应的 JS 文件。这种方式非常有效地提升系统的加载和运行效率。
+```html
+<a [routerLink]="['home', { outlets: { 'left-nav': ['leftNav'], 'main-area': ['1'] } }]">Home</a>
+```
 
 *src\app\app-routing.module.ts*
 
 ```typescript
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { LeftNavComponent } from './home/left-nav/left-nav.component';
+import { MainAreaComponent } from './home/main-area/main-area.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', loadChildren: './home/home.module#HomeModule' }
+  {
+    path: 'home',
+    component: HomeComponent,
+    children: [
+      { path: 'leftNav', component: LeftNavComponent, outlet: 'left-nav' },
+      { path: ':id', component: MainAreaComponent, outlet: 'main-area' }
+    ]
+  },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
@@ -29,26 +39,87 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
 ```
 
- ![懒加载路由](assets/懒加载路由.png)
+## main-area
 
-注意：从 Angular8.0 开始，为了遵守最新的 import() 标准，官方建议采用新的方式来写`loadChildren`：
+*src\app\home\main-area\main-area.component.html*
+
+```html
+<h3>
+  {{ menuName }}
+</h3>
+
+```
+
+*src\app\home\main-area\main-area.component.ts*
 
 ```typescript
-// before Angular 8.x
-const routes: Routes = [
-  { path: 'home', loadChildren: './home/home.module#HomeModule' },
-  { path: 'jokes', loadChildren: './jokes/jokes.module#JokesModule' },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' }
-];
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-// Angular 8.x
-const routes: Routes = [
-  { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-  { path: 'jokes', loadChildren: () => import('./jokes/jokes.module').then(m => m.JokesModule) },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
-];
+@Component({
+  selector: 'app-main-area',
+  templateUrl: './main-area.component.html',
+  styleUrls: ['./main-area.component.scss']
+})
+export class MainAreaComponent implements OnInit {
+
+  menuName = 'No menu selected';
+
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.route.params.subscribe((params: { id: string }) => {
+      console.log(`Current Menu ID : ${ params.id }`);
+      if (params.id === '1') {
+        this.menuName = 'Look at the picture.';
+      } else {
+        this.menuName = 'Look at the text.';
+      }
+    });
+  }
+
+}
+
+```
+
+## left-nav
+
+*src\app\home\left-nav\left-nav.component.html*
+
+```typescript
+<div class="list-group">
+  <a href="javascript:void(0);" class="list-group-item active">Choose a menu</a>
+  <a class="list-group-item" (click)="toogle(1)">look at the picture</a>
+  <a class="list-group-item" (click)="toogle(2)">look at the text</a>
+</div>
+
+```
+
+*src\app\home\left-nav\left-nav.component.ts*
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-left-nav',
+  templateUrl: './left-nav.component.html',
+  styleUrls: ['./left-nav.component.scss']
+})
+export class LeftNavComponent implements OnInit {
+
+  constructor(private router: Router) { }
+
+  ngOnInit() {
+  }
+
+  toogle(id) {
+    this.router.navigate(['/home', { outlets: { 'main-area': [id] } }]);
+  }
+}
 
 ```
 
