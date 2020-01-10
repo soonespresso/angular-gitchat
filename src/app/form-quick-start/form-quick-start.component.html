@@ -1,0 +1,23 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">User registry</div>
+  <div class="panel-body">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="col-xs-2 control-label">User Name :</label>
+        <div class="col-xs-10">
+          <input type="email" class="form-control" placeholder="Email" (keyup)="userNameChange($event)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label">Password :</label>
+        <div class="col-xs-10">
+          <input #pwd type="password" class="form-control" placeholder="Password" (keyup)="'a'">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="panel-footer">
+    <p>User Name: {{ userName }}</p>
+    <p>Password: {{ pwd.value }}</p>
+  </div>
+</div>
