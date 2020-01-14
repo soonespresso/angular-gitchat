@@ -1,33 +1,97 @@
 <div class="panel panel-primary">
   <div class="panel-heading">User registry</div>
   <div class="panel-body">
-    <form class="form-horizontal">
-      <div class="form-group">
+    <form #registerForm="ngForm" class="form-horizontal">
+      <div class="form-group" [ngClass]="{'has-error': userName.invalid && (userName.dirty || userName.touched) }">
         <label class="col-xs-2 control-label">User Name :</label>
         <div class="col-xs-10">
-          <input type="email" class="form-control" placeholder="Email" [(ngModel)]="register.userName" name="userName">
+          <input #userName="ngModel" [(ngModel)]="register.userName" name="userName" required minlength="12" maxlength="32"
+                type="email" class="form-control" placeholder="Email">
+          <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="text-danger">
+            <div *ngIf="userName.errors.required">
+              This field is required.
+            </div>
+            <div *ngIf="userName.errors.minlength">
+              Please enter no at least {{ userName.errors.minlength }} characters.
+            </div>
+            <div *ngIf="userName.errors.maxlength">
+              Please enter no more than {{ userName.errors.maxlength }} characters.
+            </div>
+          </div>
         </div>
       </div>
+      <!-- 自定义校验 -->
+      <div class="form-group" [ngClass]="{'has-error': mobile.invalid && (mobile.dirty || mobile.touched) }">
+        <label class="col-xs-2 control-label">Mobile :</label>
+        <div class="col-xs-10">
+          <input #mobile="ngModel" [(ngModel)]="register.mobile" name="mobile" chineseMobileValidator required
+                type="text" placeholder="Mobile" class="form-control">
+          <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="text-danger">
+            <div *ngIf="mobile.errors.required">
+              This field is required.
+            </div>
+            <div *ngIf="mobile.errors.chineseMobileValidator">
+              Please enter a valid mobile number.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 确认密码 -->
       <div class="form-group">
         <label class="col-xs-2 control-label">Password :</label>
         <div class="col-xs-10">
-          <input type="password" class="form-control" placeholder="Password" [(ngModel)]="register.password" name="password">
+          <input #pwd="ngModel" [(ngModel)]="register.password" name="password"
+                required equalValidator="confirmPassword" reverse="true"
+                type="password" placeholder="Password" class="form-control">
+          <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)" class="text-danger">
+            <div *ngIf="pwd.errors.required">
+              This field is required.
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <div class="checkbox">
-            <label>
-                <input type="checkbox" name="rememberMe" [(ngModel)]="register.rememberMe">Remember Me
-            </label>
+        <label class="col-xs-2 control-label">Confirm password :</label>
+        <div class="col-xs-10">
+          <input #cpwd="ngModel" [(ngModel)]="register.confirmPassword" name="confirmPassword"
+                required equalValidator="password"
+                type="password" placeholder="Confirm Password" class="form-control">
+          <div *ngIf="cpwd.invalid && (cpwd.dirty || cpwd.touched)" class="text-danger">
+            <div *ngIf="cpwd.errors.required">
+              This field is required.
+            </div>
+            <div *ngIf="!cpwd.errors.equalValidator">
+              Password mismatch.
+            </div>
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="panel-footer">
-    <p>User Name: {{ register.userName }}</p>
-    <p>Password: {{ register.password }}</p>
-    <p>Remember Me: {{ register.rememberMe }}</p>
+    <p>User Name: {{userName.value}}</p>
+    <p>userName.valid: {{userName.valid}}</p>
+    <p>userName.invalid: {{userName.invalid}}</p>
+    <p>userName.pending: {{userName.pending}}</p>
+    <p>userName.pristine: {{userName.pristine}}</p>
+    <p>userName.dirty: {{userName.dirty}}</p>
+    <p>userName.untouched: {{userName.untouched}}</p>
+    <p>userName.touched: {{userName.touched}}</p>
+    <br>
+    <p>Mobile: {{ mobile.errors | json }}</p>
+    <br>
+    <p>Password: {{ pwd.errors | json }}</p>
+    <br>
+    <p>Confirm password: {{ cpwd.errors | json }}</p>
+    <br>
+    <p>Form state</p>
+    <p>registerForm.valid: {{registerForm.valid}}</p>
+    <p>registerForm.invalid: {{registerForm.invalid}}</p>
+    <p>registerForm.pending: {{registerForm.pending}}</p>
+    <p>registerForm.pristine: {{registerForm.pristine}}</p>
+    <p>registerForm.dirty: {{registerForm.dirty}}</p>
+    <p>registerForm.untouched: {{registerForm.untouched}}</p>
+    <p>registerForm.touched: {{registerForm.touched}}</p>
   </div>
 </div>

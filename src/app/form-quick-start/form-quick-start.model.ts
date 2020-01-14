@@ -1,5 +1,6 @@
 export class RegisterModel {
   userName: string;
   password: string;
-  rememberMe = false;
+  confirmPassword: string;
+  mobile: string;
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RegisterModel } from './form-quick-start.model';
+import { ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-form-quick-start',
@@ -8,6 +9,7 @@ import { RegisterModel } from './form-quick-start.model';
 })
 export class FormQuickStartComponent implements OnInit {
 
+  obj: ValidationErrors = {};
   register = new RegisterModel();
 
   constructor() { }
