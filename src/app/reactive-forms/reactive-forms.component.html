@@ -1,0 +1,106 @@
+<br>
+<div class="panel panel-primary">
+  <div class="panel-heading">用户注册</div>
+  <div class="panel-body">
+    <!-- novalidate 清除浏览器默认的校验行为 -->
+    <form [formGroup]="user" (ngSubmit)="onSubmit(user, $event)" novalidate class="form-horizontal">
+      <!-- 邮箱地址 -->
+      <div class="form-group" [ngClass]="{'has-error': user.get('email').invalid && user.get('email').touched }">
+        <label class="col-xs-2 control-label">邮箱地址 :</label>
+        <div class="col-xs-10">
+          <input formControlName="email"
+                  type="email" placeholder="请输入邮箱地址" class="form-control">
+          <div *ngIf="user.get('email').hasError('required') && user.get('email').touched" class="text-danger">
+            这是必填字段
+          </div>
+          <div *ngIf="user.get('email').hasError('email') && user.get('email').touched" class="text-danger">
+            邮箱格式不正确
+          </div>
+        </div>
+      </div>
+      <!-- 密码 -->
+      <div class="form-group" [ngClass]="{'has-error': user.get('password').invalid && user.get('password').touched }">
+        <label class="col-xs-2 control-label">密码 :</label>
+        <div class="col-xs-10">
+          <input formControlName="password"
+                  type="password" placeholder="请输入密码" class="form-control">
+          <div *ngIf="user.get('password').hasError('required') && user.get('password').touched" class="text-danger">
+            这是必填字段
+          </div>
+          <div *ngIf="user.get('password').hasError('minlength') && user.get('password').touched" class="text-danger">
+            最少要输入 8 个字符
+          </div>
+        </div>
+      </div>
+      <!-- 确认密码 -->
+      <div class="form-group" [ngClass]="{'has-error': user.get('confirm').invalid && user.get('confirm').touched }">
+        <label class="col-xs-2 control-label">确认密码 :</label>
+        <div class="col-xs-10">
+          <input formControlName="confirm"
+                  type="password" placeholder="请输入确认密码" class="form-control">
+          <div *ngIf="user.get('confirm').hasError('required') && user.get('confirm').touched" class="text-danger">
+            这是必填字段
+          </div>
+          <div *ngIf="user.get('confirm').hasError('minlength') && user.get('confirm').touched" class="text-danger">
+            最少要输入 8 个字符
+          </div>
+          <div *ngIf="user.hasError('validateEqual') && user.get('confirm').touched" class="text-danger">
+            确认密码不匹配
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-2" style="text-align: right;">
+          <button class="btn" (click)="addAddress()">添加地址</button>
+        </div>
+      </div>
+
+      <!-- 区域 -->
+      <div formArrayName="address">
+        <div [formGroupName]="i" *ngFor="let item of user.controls.address['controls']; let i = index;" class="form-group">
+          <!-- 省份 -->
+          <label class="col-xs-2 control-label">省份 :</label>
+          <div class="col-xs-10 limit">
+            <select formControlName="province" class="form-control">
+              <option value="">请选择省份</option>
+              <option [value]="province" *ngFor="let province of provinces">{{ province }}</option>
+            </select>
+          </div>
+          <!-- 城市 -->
+          <label class="col-xs-2 control-label">城市 :</label>
+          <div class="col-xs-10 limit">
+            <select formControlName="city" class="form-control">
+              <option value="">请选择城市</option>
+              <option [value]="city" *ngFor="let city of cities$[i] | async">{{ city }}</option>
+            </select>
+          </div>
+          <!-- 区县 -->
+          <label class="col-xs-2 control-label">区县 :</label>
+          <div class="col-xs-10 limit">
+            <select formControlName="area" class="form-control">
+              <option value="">请选择区县</option>
+              <option [value]="area" *ngFor="let area of areas$[i] | async">{{ area }}</option>
+            </select>
+          </div>
+          <!-- 地址 -->
+          <label class="col-xs-2 control-label">地址 :</label>
+          <div class="col-xs-10 limit">
+            <input formControlName="street"
+                  type="text" placeholder="请输入地址" class="form-control">
+          </div>
+        </div>
+      </div>
+      <!-- 提交按钮 -->
+      <div class="form-group">
+        <div class="col-xs-12" style="text-align: center;">
+          <button class="btn btn-primary" style="width: 100px;" [disabled]="user.invalid">注册</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- 数据显示 -->
+  <div class="panel-footer">
+    <p>User: {{ user.value | json }}</p>
+  </div>
+</div>
